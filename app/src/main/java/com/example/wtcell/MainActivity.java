@@ -1,5 +1,6 @@
 package com.example.wtcell;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,28 +10,41 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText email, senha;
+    EditText edtemail, edsenha;
     TextView conta_nv;
     Button button;
+
+    Cliente cliente = new Cliente();
+    Cliente clienteEnviar= new Cliente();
+    DatabaseReference reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        email = findViewById(R.id.cmp_email);
-        senha = findViewById(R.id.cmp_pass);
+        FirebaseApp.initializeApp(this);
+        edtemail = findViewById(R.id.cmp_email);
+        edsenha = findViewById(R.id.cmp_pass);
         button = findViewById(R.id.acess_log);
         conta_nv = findViewById(R.id.add_conta);
+        reference = FirebaseDatabase.getInstance().getReference("cliente");
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Home_Cliente.class);
-                startActivity(intent);
+                loginClinte(edtemail.getText().toString(), edsenha.getText().toString());
             }
         });
 
@@ -42,5 +56,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void loginClinte(String email, String senha){
+
+        if(email.trim().isEmpty()) edtemail.setError("Preencha o campo E-mail!");
+        else if(senha.trim().isEmpty()) edsenha.setError("Preencha o campo Senha!");
+        else {
+
+            Query query = reference.orderByChild("email")
+                    .equalTo(email);
+
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot snapshot1: snapshot.getChildren()){
+                        cliente = snapshot1.getValue(Cliente.class);
+                        clienteEnviar = cliente;
+                    }
+
+
+                    if(clienteEnviar.getSenha().equals(senha)){
+
+                        Intent intent = new Intent(MainActivity.this, ClientePage.class);
+                        intent.putExtra("cliente", clienteEnviar);
+                        startActivity(intent);
+                        finish();
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+        }
     }
 }
