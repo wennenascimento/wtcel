@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,11 +31,26 @@ public class Fragment1 extends Fragment {
         Button button;
 
         Bitmap foto;
+        Cliente cliente;
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             view = inflater.inflate(R.layout.fragment_1, container, false);
+
+            Bundle cl = getActivity().getIntent().getExtras();
+            if ((cl!= null) && (cl.containsKey("cliente"))) {
+                cliente  = (Cliente) cl.getSerializable("cliente");
+
+            }else {
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Toast.makeText(getActivity(),
+                        "Login expirado!", Toast.LENGTH_LONG).show();
+                startActivity(intent);
+                getActivity().finish();
+
+            }
 
         modelo = view.findViewById(R.id.id_model);
         marca = view.findViewById(R.id.id_marca);
@@ -44,7 +60,7 @@ public class Fragment1 extends Fragment {
         camera = view.findViewById(R.id.id_foto);
         button = view.findViewById(R.id.add_atdd);
 
-            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
 
                 ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, 0);
 

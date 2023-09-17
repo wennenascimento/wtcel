@@ -27,15 +27,16 @@
                 android:id="@+id/id_foto"
                 android:layout_width="171dp"
                 android:layout_height="182dp"
+                android:contentDescription="TODO"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.018"
 
+                app:layout_constraintVertical_bias="0.018"
                 app:srcCompat="@drawable/ic_baseline_camera_24"
-                android:contentDescription="TODO" />
+                tools:ignore="ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -43,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Foto"
-                android:textColor="@color/purple_700"
+                android:textColor="#651FFF"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/id_foto"

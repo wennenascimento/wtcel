@@ -10,22 +10,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class ClienteNovo extends AppCompatActivity {
 
-    EditText usuario, email, senha;
+    EditText edtcliente, edtemail, edtsenha;
     TextView back;
     Button button;
+
+    DatabaseReference reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente_novo);
 
-        usuario = findViewById(R.id.ad_name);
-        email = findViewById(R.id.ad_email);
-        senha = findViewById(R.id.ad_pass);
+        edtcliente = findViewById(R.id.ad_name);
+        edtemail = findViewById(R.id.ad_email);
+        edtsenha = findViewById(R.id.ad_pass);
+
+        FirebaseApp.initializeApp(this);
 
          back = findViewById(R.id.id_retu_login);
          button = findViewById(R.id.button_new);
+
+         reference = FirebaseDatabase.getInstance().getReference("cliente");
 
          back.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -38,9 +49,33 @@ public class ClienteNovo extends AppCompatActivity {
          button.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
+
+                 CadastrarCliente(edtcliente.getText().toString(),
+                         edtemail.getText().toString(),
+                         edtsenha.getText().toString());
+
                  Toast.makeText(ClienteNovo.this, "Dados cadastrados com sucesso", Toast.LENGTH_LONG).show();
              }
          });
+
+    }
+
+    public void CadastrarCliente(String nomeCliente, String emailCliente, String senhaCliente){
+
+        if(nomeCliente.trim().isEmpty()) edtcliente.setError("Preencha o campo Usuario!");
+        else if(emailCliente.trim().isEmpty()) edtemail.setError("Preencha o campo E-mail!");
+        else if (senhaCliente.trim().isEmpty()) edtsenha.setError("Preencha o campo Senha!");
+        else {
+            Cliente cliente = new Cliente();
+            cliente.setNomeCliente(nomeCliente);
+            cliente.setEmail(emailCliente);
+            cliente.setSenha(senhaCliente);
+
+            DatabaseReference getKeyId = reference.push();
+            cliente.setKey(getKeyId.getKey());
+            reference.child(cliente.getKey()).setValue(cliente);
+
+        }
 
     }
 }
