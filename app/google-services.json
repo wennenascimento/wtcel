@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "490494439208",
+    "project_id": "projeto1-60ce1",
+    "storage_bucket": "projeto1-60ce1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490494439208:android:59b1bf2d80902b38706a1d",
+        "android_client_info": {
+          "package_name": "com.example.wtcell"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxjDivzRoOTrKOBkZD8y1GtDYAaQwy5t0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
